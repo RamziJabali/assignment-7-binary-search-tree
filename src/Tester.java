@@ -1,5 +1,5 @@
 public class Tester {
-    public static void main(String [] args){
+    public static void main(String[] args) {
         Table table = new Table();
         MLBPlayerKey key = new MLBPlayerKey(22, "A");
         MLBPlayerKey key2 = new MLBPlayerKey(25, "B");
@@ -12,6 +12,7 @@ public class Tester {
         table.addNode(key4);
         table.addNode(key5);
         table.inOrderTrav();
+        System.out.println(table.search(key));
     }
 
 }

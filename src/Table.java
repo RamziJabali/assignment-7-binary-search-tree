@@ -35,11 +35,12 @@ public class Table {
         }
     }
 
-    public void inOrderTrav(){
+    public void inOrderTrav() {
         inOrderTraversal(root);
     }
-    private void inOrderTraversal(TNode focusNode){
-        if(focusNode != null){
+
+    private void inOrderTraversal(TNode focusNode) {
+        if (focusNode != null) {
             inOrderTraversal(focusNode.left);
             System.out.println(focusNode);
             inOrderTraversal(focusNode.right);
@@ -50,8 +51,20 @@ public class Table {
 
     }
 
-    public Keyed search(Keyed value) {
-        return null;
+    public TNode search(Keyed value) {
+        TNode focusNode = root;
+
+        while (!focusNode.value.equals(value)) {
+            if (focusNode.value.keyComp(value) == -1) {
+                focusNode = focusNode.left;
+            } else {
+                focusNode = focusNode.right;
+            }
+            if (focusNode == null) {
+                return null;
+            }
+        }
+        return focusNode;
     }
 
     public void showTree() {
