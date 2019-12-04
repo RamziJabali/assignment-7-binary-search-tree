@@ -1,5 +1,6 @@
 public class Table {
     private TNode root;
+    private String text = "";
 
     public Table(Keyed key) {
         root = new TNode(key);
@@ -35,14 +36,10 @@ public class Table {
         }
     }
 
-    public void inOrderTrav() {
-        inOrderTraversal(root);
-    }
-
     private void inOrderTraversal(TNode focusNode) {
         if (focusNode != null) {
             inOrderTraversal(focusNode.left);
-            System.out.println(focusNode);
+            text += focusNode + "\n";
             inOrderTraversal(focusNode.right);
         }
     }
@@ -75,5 +72,10 @@ public class Table {
         return -0;
     }
 
-
+    @Override
+    public String toString() {
+        text = "";
+        inOrderTraversal(root);
+        return text;
+    }
 }
