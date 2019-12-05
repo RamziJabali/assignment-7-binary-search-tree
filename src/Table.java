@@ -44,6 +44,19 @@ public class Table {
         }
     }
 
+    private int maximumHeight(TNode node) {
+        if (node == null)
+            return 0;
+        else {
+            int leftTreeDepth = maximumHeight(node.left);
+            int rightTreeDepth = maximumHeight(node.right);
+            if (leftTreeDepth > rightTreeDepth) {
+                return (leftTreeDepth + 1);
+            } else
+                return (rightTreeDepth + 1);
+        }
+    }
+
     public void delete(Keyed value) {
 
     }
@@ -70,6 +83,10 @@ public class Table {
 
     public int getAverageLevel(Keyed value) {
         return -0;
+    }
+
+    public int getHeight() {
+        return maximumHeight(root);
     }
 
     @Override
