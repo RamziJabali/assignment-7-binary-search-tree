@@ -10,7 +10,7 @@ public class Table {
         root = null;
     }
 
-    public void addNode(Keyed value) {
+    public void insert(Keyed value) {
         TNode newNode = new TNode(value);
         if (root == null) {
             root = newNode;
@@ -41,7 +41,38 @@ public class Table {
     }
 
     public int getSize() {
-        return getSizeForNode(root);
+        return getSizeForNode(root) - 1;
+    }
+
+    public void delete(Keyed value) {
+        if (root == null) {
+            return;
+        }
+        if (root.value.keyComp(value) == 0) {
+            root = null;
+            return;
+        }
+        deleteHelper(value, null, root);
+    }
+
+    public Keyed search(Keyed value) {
+        TNode focusNode = root;
+
+        while (!focusNode.value.equals(value)) {
+            if (focusNode.value.keyComp(value) == -1) {
+                focusNode = focusNode.left;
+            } else {
+                focusNode = focusNode.right;
+            }
+            if (focusNode == null) {
+                return null;
+            }
+        }
+        return focusNode.value;
+    }
+
+    public void showTree() {
+        printTree(root, 0);
     }
 
     private int getSizeForNode(TNode node) {
@@ -65,15 +96,19 @@ public class Table {
         return (rightTreeDepth + 1);
     }
 
-    public void delete(Keyed value) {
+    private void printTree(TNode root, int space) {
         if (root == null) {
             return;
         }
-        if (root.value.keyComp(value) == 0) {
-            root = null;
-            return;
+        int count = 10;
+        space += count;
+        printTree(root.right, space);
+        System.out.print("\n");
+        for (int i = count; i < space; i++) {
+            System.out.print(" ");//printing space
         }
-        deleteHelper(value, null, root);
+        System.out.print(root.value.toStr() + "\n");
+        printTree(root.left, space);
     }
 
     private void deleteHelper(Keyed value, TNode parentNode, TNode currentNode) {
@@ -135,26 +170,6 @@ public class Table {
         parentNode.right = null;
     }
 
-    public TNode search(Keyed value) {
-        TNode focusNode = root;
-
-        while (!focusNode.value.equals(value)) {
-            if (focusNode.value.keyComp(value) == -1) {
-                focusNode = focusNode.left;
-            } else {
-                focusNode = focusNode.right;
-            }
-            if (focusNode == null) {
-                return null;
-            }
-        }
-        return focusNode;
-    }
-
-    public void showTree() {
-
-    }
-
     public int getAverageHeight() {
         return getSize() / getHeight();
     }
@@ -166,7 +181,7 @@ public class Table {
     private void printInOrderTraversal(TNode focusNode) {
         if (focusNode != null) {
             printInOrderTraversal(focusNode.left);
-            text += focusNode + "\n";
+            text += focusNode.value + "\n";
             printInOrderTraversal(focusNode.right);
         }
     }

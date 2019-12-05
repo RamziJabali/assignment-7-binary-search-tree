@@ -35,6 +35,6 @@ public class MLBPlayerKey implements Keyed {
 
     @Override
     public String toStr() {
-        return jerseyNum + " " + teamName;
+        return jerseyNum + " " + teamName.charAt(0) + teamName.charAt(1) + teamName.charAt(2);
     }
 }
