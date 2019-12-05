@@ -15,6 +15,7 @@ public class MLBPlayer extends MLBPlayerKey {
     public String getPlayerName() {
         return playerName;
     }
+
     @Override
     public String toString() {
         return "Player " + playerName + "Has a batting average of" + battingAverage + "";

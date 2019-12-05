@@ -6,13 +6,4 @@ public class TNode {
         value = _key;
         left = right = null;
     }
-
-    @Override
-    public String toString() {
-        if (value instanceof MLBPlayerKey) {
-            return ((MLBPlayerKey) value).getTeamName() + " Number " + ((MLBPlayerKey) value).getJerseyNum();
-        }
-        return null;
-        //   return "Player " + key.getPlayerName() + "Has a batting average of" + key.getBattingAverage() + "";
-    }
 }

@@ -14,51 +14,123 @@ public class Table {
         TNode newNode = new TNode(value);
         if (root == null) {
             root = newNode;
-        } else {
-            TNode focusNode = root;//have to start with root as we traverse
-            TNode parent;//future parent for new node
-            while (true) {// to change what the node focus is
-                parent = focusNode;
-                if (parent.value.keyComp(value) == -1) {//using keyComp to compare values
-                    focusNode = focusNode.left;// if it is less than the root go to the left
-                    if (focusNode == null) {// if it has no child to the left
-                        parent.left = newNode;//set the left child to new node
-                        return;//to get us out of the infinite loop
-                    }
-                } else {
-                    focusNode = focusNode.right;// if we reach here we know that we need to put our node on the right child
-                    if (focusNode == null) {// if it is null add it to the right child
-                        parent.right = newNode;
-                        return;
-                    }
+            return;
+        }
+        TNode focusNode = root;//have to start with root as we traverse
+        TNode parent;//future parent for new node
+        while (true) {// to change what the node focus is
+            parent = focusNode;
+            if (parent.value.keyComp(value) == -1) {//using keyComp to compare values
+                focusNode = focusNode.left;// if it is less than the root go to the left
+                if (focusNode == null) {// if it has no child to the left
+                    parent.left = newNode;//set the left child to new node
+                    return;//to get us out of the infinite loop
+                }
+            } else {
+                focusNode = focusNode.right;// if we reach here we know that we need to put our node on the right child
+                if (focusNode == null) {// if it is null add it to the right child
+                    parent.right = newNode;
+                    return;
                 }
             }
         }
     }
 
-    private void inOrderTraversal(TNode focusNode) {
+    private void printInOrderTraversal(TNode focusNode) {
         if (focusNode != null) {
-            inOrderTraversal(focusNode.left);
+            printInOrderTraversal(focusNode.left);
             text += focusNode + "\n";
-            inOrderTraversal(focusNode.right);
+            printInOrderTraversal(focusNode.right);
         }
+    }
+
+    public int getSize() {
+        return getSizeForNode(root);
+    }
+
+    private int getSizeForNode(TNode node) {
+        if (node == null) {
+            return 1;
+        }
+        int leftTreeDepth = getSizeForNode(node.left);
+        int rightTreeDepth = getSizeForNode(node.right);
+        return leftTreeDepth + rightTreeDepth;
     }
 
     private int maximumHeight(TNode node) {
-        if (node == null)
+        if (node == null) {
             return 0;
-        else {
-            int leftTreeDepth = maximumHeight(node.left);
-            int rightTreeDepth = maximumHeight(node.right);
-            if (leftTreeDepth > rightTreeDepth) {
-                return (leftTreeDepth + 1);
-            } else
-                return (rightTreeDepth + 1);
         }
+        int leftTreeDepth = maximumHeight(node.left);
+        int rightTreeDepth = maximumHeight(node.right);
+        if (leftTreeDepth > rightTreeDepth) {
+            return (leftTreeDepth + 1);
+        }
+        return (rightTreeDepth + 1);
     }
 
     public void delete(Keyed value) {
+        if (root == null) {
+            return;
+        }
+        if (root.value.keyComp(value) == 0) {
+            root = null;
+            return;
+        }
+        deleteHelper(value, null, root);
+    }
 
+    public void deleteHelper(Keyed value, TNode parentNode, TNode currentNode) {
+        if (currentNode.value.keyComp(value) == 0) {
+            if (currentNode.left == null && currentNode.right == null) {
+                deleteDanglingLeaf(value, parentNode);
+                return;
+            }
+            if (currentNode.left == null && currentNode.right != null) {
+                deleteLeftlessTree(value, parentNode, currentNode);
+                return;
+            }
+            if (currentNode.left != null && currentNode.right == null) {
+                deleteRightlessTree(value, parentNode, currentNode);
+                return;
+            }
+            deletePopulatedChildrenNode(value, parentNode, currentNode);
+            return;
+        }
+        if (currentNode.value.keyComp(value) < 0) {
+            deleteHelper(value, currentNode, currentNode.left);
+            return;
+        }
+        deleteHelper(value, currentNode, currentNode.right);
+    }
+
+    // TODO: handle delete populated left & right case
+    private void deletePopulatedChildrenNode(Keyed value, TNode parentNode, TNode currentNode) {
+
+    }
+
+    private void deleteLeftlessTree(Keyed value, TNode parentNode, TNode currentNode) {
+        if (parentNode.value.keyComp(value) < 0) {
+            parentNode.left = currentNode.right;
+            return;
+        }
+        parentNode.right = currentNode.right;
+    }
+
+    private void deleteRightlessTree(Keyed value, TNode parentNode, TNode currentNode) {
+        if (parentNode.value.keyComp(value) < 0) {
+            parentNode.left = currentNode.left;
+            return;
+        }
+        parentNode.right = currentNode.left;
+    }
+
+    private void deleteDanglingLeaf(Keyed value, TNode parentNode) {
+        if (parentNode.value.keyComp(value) < 0) {
+            parentNode.left = null;
+            return;
+        }
+        parentNode.right = null;
     }
 
     public TNode search(Keyed value) {
@@ -81,8 +153,8 @@ public class Table {
 
     }
 
-    public int getAverageLevel(Keyed value) {
-        return -0;
+    public int getAverageHeight() {
+        return getSize() / getHeight();
     }
 
     public int getHeight() {
@@ -92,7 +164,7 @@ public class Table {
     @Override
     public String toString() {
         text = "";
-        inOrderTraversal(root);
+        printInOrderTraversal(root);
         return text;
     }
 }
