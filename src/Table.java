@@ -19,7 +19,7 @@ public class Table {
         addNodeHelper(newNode, root);
     }
 
-    public void addNodeHelper(TNode newNode, TNode parentNode) {
+    private void addNodeHelper(TNode newNode, TNode parentNode) {
         TNode focusNode = parentNode;//have to start with parent as we traverse
         TNode parent;//future parent for new node
         while (true) {// to change what the node focus is
@@ -37,14 +37,6 @@ public class Table {
                     return;
                 }
             }
-        }
-    }
-
-    private void printInOrderTraversal(TNode focusNode) {
-        if (focusNode != null) {
-            printInOrderTraversal(focusNode.left);
-            text += focusNode + "\n";
-            printInOrderTraversal(focusNode.right);
         }
     }
 
@@ -84,7 +76,7 @@ public class Table {
         deleteHelper(value, null, root);
     }
 
-    public void deleteHelper(Keyed value, TNode parentNode, TNode currentNode) {
+    private void deleteHelper(Keyed value, TNode parentNode, TNode currentNode) {
         if (currentNode.value.keyComp(value) == 0) {
             if (currentNode.left == null && currentNode.right == null) {
                 deleteDanglingLeaf(value, parentNode);
@@ -169,6 +161,14 @@ public class Table {
 
     public int getHeight() {
         return maximumHeight(root);
+    }
+
+    private void printInOrderTraversal(TNode focusNode) {
+        if (focusNode != null) {
+            printInOrderTraversal(focusNode.left);
+            text += focusNode + "\n";
+            printInOrderTraversal(focusNode.right);
+        }
     }
 
     @Override
