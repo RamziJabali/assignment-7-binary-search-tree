@@ -6,4 +6,8 @@ public class TNode {
         value = _key;
         left = right = null;
     }
+
+    public int keyComp(TNode node) {
+        return value.keyComp(node.value);
+    }
 }

@@ -16,11 +16,15 @@ public class Table {
             root = newNode;
             return;
         }
-        TNode focusNode = root;//have to start with root as we traverse
+        addNodeHelper(newNode, root);
+    }
+
+    public void addNodeHelper(TNode newNode, TNode parentNode) {
+        TNode focusNode = parentNode;//have to start with parent as we traverse
         TNode parent;//future parent for new node
         while (true) {// to change what the node focus is
             parent = focusNode;
-            if (parent.value.keyComp(value) == -1) {//using keyComp to compare values
+            if (parent.keyComp(newNode) < 0) {//using keyComp to compare values
                 focusNode = focusNode.left;// if it is less than the root go to the left
                 if (focusNode == null) {// if it has no child to the left
                     parent.left = newNode;//set the left child to new node
@@ -94,7 +98,7 @@ public class Table {
                 deleteRightlessTree(value, parentNode, currentNode);
                 return;
             }
-            deletePopulatedChildrenNode(value, parentNode, currentNode);
+            deletePopulatedChildrenNode(parentNode, currentNode);
             return;
         }
         if (currentNode.value.keyComp(value) < 0) {
@@ -104,9 +108,15 @@ public class Table {
         deleteHelper(value, currentNode, currentNode.right);
     }
 
-    // TODO: handle delete populated left & right case
-    private void deletePopulatedChildrenNode(Keyed value, TNode parentNode, TNode currentNode) {
-
+    private void deletePopulatedChildrenNode(TNode parentNode, TNode currentNode) {
+        addNodeHelper(currentNode.left, currentNode.right);
+        currentNode.left = null;
+        if (currentNode.keyComp(parentNode) > 0) {
+            parentNode.right = currentNode.right;
+        } else {
+            parentNode.left = currentNode.right;
+        }
+        currentNode.right = null;
     }
 
     private void deleteLeftlessTree(Keyed value, TNode parentNode, TNode currentNode) {
